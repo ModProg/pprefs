@@ -413,7 +413,7 @@ impl ToTokens for GetterFunction {
                 #let_sysfs_path
                 #let_read
                 unsafe {
-                    ::sysfs_lib::sysfs_read::<#into_type>(&sysfs_path, read)
+                    ::sysfs::lib::sysfs_read::<#into_type>(&sysfs_path, read)
                 }
             }
         });
@@ -442,7 +442,7 @@ impl ToTokens for SetterFunction {
                 #let_sysfs_path
                 #let_write
                 unsafe {
-                    ::sysfs_lib::sysfs_write(&sysfs_path, write(#from_ident))
+                    ::sysfs::lib::sysfs_write(&sysfs_path, write(#from_ident))
                 }
             }
         });
@@ -469,10 +469,10 @@ impl TryFrom<ItemSysfsAttrFn> for GetterFunction {
             // instead. The local assignment will not retain attributes.
             attrs.append(&mut local.attrs);
             // Extract the original type from the signature,
-            // and wrap the existing one with `::sysfs_lib::Result`.
+            // and wrap the existing one with `::sysfs::lib::Result`.
             let into_type;
             (into_type, sig.output) = if let ReturnType::Type(_, ty) = sig.output {
-                Ok((ty.clone(), parse_quote!(-> ::sysfs_lib::Result<#ty>)))
+                Ok((ty.clone(), parse_quote!(-> ::sysfs::lib::Result<#ty>)))
             } else {
                 err!(
                     sig.output,
@@ -540,7 +540,7 @@ impl TryFrom<ItemSysfsAttrFn> for SetterFunction {
 
         sig.ident = format_ident!("set_{}", sig.ident);
         sig.inputs.push(parse_quote!(#from_ident: #from_type));
-        sig.output = parse_quote!(-> ::sysfs_lib::Result<()>);
+        sig.output = parse_quote!(-> ::sysfs::lib::Result<()>);
 
         Ok(Self {
             attrs,

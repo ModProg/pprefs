@@ -15,7 +15,7 @@ pub fn list_power_supplies() -> Vec<String> {
 #[sysfs_attrs(in "/sys/class/power_supply/{psu}")]
 pub mod power_supply {
     use strum::{EnumString, FromRepr, IntoStaticStr};
-    use sysfs_lib::parse_selected;
+    use crate::lib::parse_selected;
 
     use crate::lib::sysfs;
 

@@ -1,5 +1,9 @@
+extern crate self as sysfs;
+
+mod sysfs_lib;
+
 pub mod lib {
-    pub use sysfs_lib::*;
+    pub use crate::sysfs_lib::*;
     pub use sysfs_macros::*;
 }
 
